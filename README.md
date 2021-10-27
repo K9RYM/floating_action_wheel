@@ -82,12 +82,23 @@ FloatingActionWheel(
 ```
 
 ### - Demonstration example
-
-![Screenshot_20211027-213030](https://user-images.githubusercontent.com/75282663/139157328-f1f89f0a-8f43-4d5f-b0b2-07dfcab56d9e.jpg)
-![Screenshot_20211027-213043](https://user-images.githubusercontent.com/75282663/139157339-6d4b7dcb-bb59-4e14-b3b3-4bb00cc4b305.jpg)
-![Screenshot_20211027-213053](https://user-images.githubusercontent.com/75282663/139157353-9b1cd083-164a-42b6-af56-9775bba5a401.jpg)
-![Screenshot_20211027-213106](https://user-images.githubusercontent.com/75282663/139157366-69ac3c2a-b32a-4c7d-868b-39d8659a4a65.jpg)
-![Screenshot_20211027-213219](https://user-images.githubusercontent.com/75282663/139157380-950e6329-ea61-416a-b40a-6f505b99a0d2.jpg)
-![Screenshot_20211027-213301](https://user-images.githubusercontent.com/75282663/139157390-1b97b00d-d613-4a12-a548-ebf21129df2f.jpg)
+<img src=
+"https://user-images.githubusercontent.com/75282663/139159039-4d6e705c-6fcf-48cc-ae4f-6d269a8f5c2c.jpg"
+height = "320" width = "180" />
+<img src=
+"https://user-images.githubusercontent.com/75282663/139159070-256fa6ee-6110-4351-b596-63fd08a31eca.jpg"
+height = "320" width = "180" />
+<img src=
+"https://user-images.githubusercontent.com/75282663/139159080-89dce8fe-4873-4549-bbc6-34dcd926a9f9.jpg"
+height = "320" width = "180" />
+<img src=
+"https://user-images.githubusercontent.com/75282663/139159089-20e5ac97-4fa5-40f1-bd98-adf9a6601370.jpg"
+height = "320" width = "180" />
+<img src=
+"https://user-images.githubusercontent.com/75282663/139159099-6bd7d09c-3b33-4744-a1ed-4f7e42458bc7.jpg"
+height = "320" width = "180" />
+<img src=
+"https://user-images.githubusercontent.com/75282663/139159106-7be4851f-d03f-41d9-a1cc-5949dfd18ce4.jpg"
+height = "320">
 
 
