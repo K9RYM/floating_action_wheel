@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'file:///C:/Users/K-99/Documents/AndroidStudioProjects/floating_action_wheel/lib/src/floating_action_wheel.dart';
-import 'package:floatingactionwheel/src/wheel_slice.dart';
-import 'file:///C:/Users/K-99/Documents/AndroidStudioProjects/floating_action_wheel/lib/src/wheel_button.dart';
+
+import 'package:floating_action_wheel/src/wheel_slice.dart';
+import 'package:floating_action_wheel/floating_action_wheel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:floatingactionwheel/floating_action_wheel.dart';
+import 'package:floating_action_wheel/floating_action_wheel.dart';
 
 
 class DemoRoute extends StatefulWidget{

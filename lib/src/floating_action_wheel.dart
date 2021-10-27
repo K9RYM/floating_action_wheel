@@ -186,7 +186,7 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
       elevation: widget.fabElevation,
       child:
       Image.asset(
-        'assets/wheel_icon.png', height: 35,width: 35,package: 'floatingactionwheel',filterQuality:FilterQuality.high,),
+        'assets/wheel_icon.png', height: 35,width: 35,package: 'floating_action_wheel',filterQuality:FilterQuality.high,),
     );
   }
 
