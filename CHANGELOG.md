@@ -1,7 +1,7 @@
-## v[0.9.0] - Beta for open testing
+## v[0.9.1] - Beta for open testing
 
-Initial release: v0.9.0 BETA
-features/changes from previous version:
+Initial release: v0.9.1 oen BETA
+features/changes from previous versions:
 1- the FAB and the ImmersiveWheel widgets now using CompositeTransformTarget/Follower widgets to attach them to each other, previous version
    was using an Overlay widget and was incompatible with the Scaffold's FAB slot
 2- added parameter to separate each button
