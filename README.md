@@ -27,8 +27,8 @@ Simply import the main classes and use the main FloatingActionWheel() constructo
 buttons list where you pass a list of WheelButton each has its own parameters, internal documentation for the parameters available
 
 ```dart
-import 'package:floatingactionwheel/floating_action_wheel.dart';
-import 'package:floatingactionwheel/wheel_button.dart';
+import 'package:floating_action_wheel/floating_action_wheel.dart';
+import 'package:floating_action_wheel/wheel_button.dart';
 ```
 
 ### - Implementation
