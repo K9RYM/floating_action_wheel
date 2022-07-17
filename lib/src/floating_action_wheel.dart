@@ -1,18 +1,11 @@
 
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:floating_action_wheel/src/immersive_wheel.dart';
+import 'package:floating_action_wheel/src/wheel_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-
-import 'immersive_wheel.dart';
-
-
-import 'package:flutter/widgets.dart';
-
-import 'wheel_button.dart';
 
 enum WheelAnimationType{
-  around,center,none,@deprecated helicopter
+  around,center,none,@deprecated apacheRotor
 }
 enum WheelSize{
   wheel_small_90,wheel_medium_120,wheel_large_150
@@ -27,8 +20,8 @@ class FloatingActionWheel extends StatefulWidget {
 
 
   FloatingActionWheel(
-      {Key key, @required this.buttons, this.animationType = WheelAnimationType.center,
-        this.wheelSize = WheelSize.wheel_medium_120,
+      {Key? key, required this.buttons, this.animationType = WheelAnimationType.around,
+        this.wheelSize = WheelSize.wheel_medium_120,this.defaultPressed=false,
         this.angleOffset = 90.0, this.visiblePart = 1, this.separated = false,
         this.fabBackgroundColor,this.fabForegroundColor,this.fabHeroTag,this.fabElevation=0
       }):
@@ -55,6 +48,19 @@ class FloatingActionWheel extends StatefulWidget {
   final double visiblePart;
 
 
+  ///   bool [defaultPressed] Init the widget with the ImmersiveWheel on by default
+  ///
+  ///   Defaults to false
+  final bool defaultPressed;
+
+
+  ///   WheelSize [wheelSize] the wheel's height/weight size, currently supported sizes are:
+  ///   [WheelSize.wheel_small_90] , [WheelSize.wheel_medium_120] , [WheelSize.wheel_large_150]
+  ///
+  ///   Defaults to [WheelSize.wheel_medium_120]
+  final WheelSize wheelSize;
+
+
 
   ///   bool [separated] sets a separation bezel between each [WheelButton]
   ///
@@ -64,27 +70,28 @@ class FloatingActionWheel extends StatefulWidget {
   ///   AnimationType [animationType] an animation to draw the wheel from the [angleOffset]
   ///   to the end of [visiblePart] if specified, animations are either:
   ///   [WheelAnimationType.around] to draw the wheel circularly around the FAB,
-  ///   [WheelAnimationType.center] to draw the wheel from center
-  ///   and [WheelAnimationType.none] to disable animation
+  ///   [WheelAnimationType.center] to draw the wheel from center to the edge
+  ///   [WheelAnimationType.none] to disable animation
+  ///   [WheelAnimationType.apacheRotor] secret animation, use caution!
   ///
-  ///   Defaults to [WheelAnimationType.center]
+  ///   Defaults to [WheelAnimationType.around]
   final WheelAnimationType animationType;
 
 
-  ///   Color [fabForegroundColor] the foreground color for [FloatingActionButton]
+  ///   Color? [fabForegroundColor] the foreground color for [FloatingActionButton]
   ///
   ///   Defaults to [FloatingActionButton] default foreground color
-  final Color fabForegroundColor;
+  final Color? fabForegroundColor;
 
 
-  ///   Color [fabBackgroundColor] the background color for [FloatingActionButton]
+  ///   Color? [fabBackgroundColor] the background color for [FloatingActionButton]
   ///
   ///   Defaults to [FloatingActionButton] default background color
-  final Color fabBackgroundColor;
+  final Color? fabBackgroundColor;
 
 
   ///   Object [fabHeroTag]  set the hero tag for the FAB if you already have another FAB in the current route
-  final Object fabHeroTag;
+  final Object? fabHeroTag;
 
 
 
@@ -95,38 +102,59 @@ class FloatingActionWheel extends StatefulWidget {
 
 
 
-  ///   WheelSize [wheelSize] the wheel's height/weight size, currently supported sizes are:
-  ///   [WheelSize.wheel_small_90] , [WheelSize.wheel_medium_120] , [WheelSize.wheel_large_150]
-  ///
-  ///   Defaults to [WheelSize.wheel_medium_120]
-  final WheelSize wheelSize;
-
-
   @override
   State<StatefulWidget> createState() {
-    return new FloatingActionWheelState();
+    return new _FloatingActionWheelState();
   }
 
 }
 
-class FloatingActionWheelState extends State<FloatingActionWheel> {
+class _FloatingActionWheelState extends State<FloatingActionWheel> {
 
-  bool _isPressed = false;
-  double _size;
-  double _stroke;
-  double _constrains;
-  OverlayEntry _overlayEntry;
+  late bool _isPressed;
+  double _size=0;
+  double _stroke=0;
+  double _constrains=0;
+  late OverlayEntry _overlayEntry;
   final LayerLink _link = LayerLink();
 
 
 
-  @override
-  void initState() {
-    super.initState();
-    this._overlayEntry = this._dummyOverlay();
-    _overlayEntry.maintainState =false;
 
+
+
+
+  /* Extracting ImageInfo object from Image is done in the main widget to pass context */
+  Future<ImageInfo> getImageInfo(BuildContext context,Image assetImage) async {
+    // AssetImage assetImage = AssetImage('assets/wheel_icon.png',bundle: rootBundle);
+    ImageStream stream = assetImage.image.resolve(createLocalImageConfiguration(context));
+    Completer<ImageInfo> completer = Completer();
+    stream.addListener(ImageStreamListener((ImageInfo imageInfo, _) {
+      return completer.complete(imageInfo);
+    }));
+    return completer.future;
   }
+
+  Future<void> getImage() async{
+
+    for(WheelButton wheel in widget.buttons) {
+      if (wheel.image != null) {
+        wheel.imageInfo = await getImageInfo(context, wheel.image!);
+      }
+    }
+  }
+
+
+
+  void _attachOverlay() {
+    this._overlayEntry = this._createOverlayEntry();
+    _overlayEntry.maintainState = false;
+    Navigator
+        .of(context)
+        .overlay
+        ?.insert(_overlayEntry);
+  }
+
 
 
 
@@ -136,7 +164,7 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
     return Stack(
 
       alignment: Alignment.center,
-//        clipBehavior: Clip.none,
+
       children: [
         ImmersiveWheel(
             _constrains, _stroke,
@@ -145,7 +173,6 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
             visiblePart: widget.visiblePart,
             animationType: widget.animationType,
             separated: widget.separated),
-
         _createFAB()
       ],
     );
@@ -155,7 +182,9 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
 
 
   Widget _createFABTarget() {
-    return CompositedTransformTarget(
+
+    return
+     CompositedTransformTarget(
         link: _link,
         child: _isPressed ? Container(height: 56,width: 56,) : _createFAB()
     );
@@ -166,27 +195,24 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
     return FloatingActionButton(
       heroTag: widget.fabHeroTag,
       onPressed: () {
-        setState(() {
-          if (!_isPressed) {
-            this._overlayEntry = this._createOverlayEntry();
-            _overlayEntry.maintainState = false;
-            Navigator
-                .of(context)
-                .overlay
-                .insert(_overlayEntry);
-          } else {
-            _overlayEntry.remove();
-          }
-          _isPressed = !_isPressed;
-        });
+        if(!widget.defaultPressed) {
+          setState(() {
+            if (!_isPressed) {
+              _attachOverlay();
+            }
+            else {
+              _overlayEntry.remove();
+            }
+            _isPressed = !_isPressed;
+          });
+        }
       },
       tooltip: 'Tap to open the wheel',
       foregroundColor: widget.fabForegroundColor,
       backgroundColor: widget.fabBackgroundColor,
       elevation: widget.fabElevation,
-      child:
-      Image.asset(
-        'assets/wheel_icon.png', height: 35,width: 35,package: 'floating_action_wheel',filterQuality:FilterQuality.high,),
+      child:Image.asset('assets/wheel_icon.png',
+        height: 35,width: 35,package: 'floating_action_wheel',filterQuality:FilterQuality.high),
     );
   }
 
@@ -196,18 +222,16 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
 
     RenderBox renderBox = context.findRenderObject() as RenderBox;
     var size = renderBox.size;
-//    var offset = renderBox.localToGlobal(Offset.zero);
+    var offset = renderBox.localToGlobal(Offset.zero);
 
     return OverlayEntry(
       builder: (context) =>
           Positioned(
-              left: 100,
-              top: 100,
-
+              left:offset.dx-_constrains/3,
+              top:offset.dy -_constrains/3,
               width: _constrains,
               height: _constrains,
-              child:
-              CompositedTransformFollower(
+              child: CompositedTransformFollower(
                   link: _link,
                   offset: Offset(
                     -_constrains/2 +size.height/2,
@@ -215,9 +239,10 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
                     -_constrains/2+size.width/2,
                   ),
                   showWhenUnlinked: false,
-                  child: _createWheel())
-//        ),
-//      ),
+                  child: _createWheel()
+              )
+
+
           ),
 
     );
@@ -236,8 +261,30 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
   }
 
 
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isPressed = widget.defaultPressed;
+
+    /* wheel always on by default should create the overlay post build method*/
+    if(widget.defaultPressed) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) => _attachOverlay());
+    }
+
+    this._overlayEntry = this._dummyOverlay();
+    _overlayEntry.maintainState =false;
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+
+    getImage();
 
     switch (widget.wheelSize) {
       case WheelSize.wheel_small_90:
@@ -255,9 +302,15 @@ class FloatingActionWheelState extends State<FloatingActionWheel> {
     }
     _constrains = _size * 1.8;
 
-    return _createFABTarget();
 
+
+
+    return
+      _createFABTarget();
   }
+
+
+
 
 
 }

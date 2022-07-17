@@ -30,8 +30,33 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: DemoRoute(),
+      home:DemoRoute()
+      // DismissKeyboard(
+      //     child:
+    // ),
     );
   }
 }
 
+
+
+//TODO not working
+class DismissKeyboard extends StatelessWidget {
+  final Widget child;
+  const DismissKeyboard({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (
+            currentFocus.focusedChild != null) {
+          print('unfocused');
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: child,
+    );
+  }
+}

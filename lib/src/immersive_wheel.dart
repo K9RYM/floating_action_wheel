@@ -36,24 +36,24 @@ class ImmersiveWheel extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new ImmersiveWheelState();
+    return new _ImmersiveWheelState();
   }
 }
 
-class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProviderStateMixin{
+class _ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProviderStateMixin{
 
 
-  Animation<double> _animation;
-  AnimationController _animationController;
+  late Animation<double> _animation;
+  AnimationController? _animationController;
 
   double _animFraction = 0.0;
   double _totalAngle=0;
   double _startingAngle = 0;
   double _animConstrains=0;
+  bool _isInit = false;
 
   static const double radian90 = math.pi * 2;
   static const double radianBase = math.pi / 180;
-
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProvide
           vsync: this,
         );
         final Animation<double> curvedAnimation = CurvedAnimation(
-          parent: _animationController,
+          parent: _animationController!,
           curve: Curves.easeIn,
         );
         _animation =
@@ -83,14 +83,14 @@ class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProvide
               _animConstrains = _animation.value;
             });
           });
-        _animationController.forward();
+        _animationController!.forward();
         break;
 
       case WheelAnimationType.around:
-      case WheelAnimationType.helicopter:
+      case WheelAnimationType.apacheRotor:
         int duration = 750 ;
         var curve = Curves.easeIn;
-        if(widget.animationType == WheelAnimationType.helicopter){
+        if(widget.animationType == WheelAnimationType.apacheRotor){
           duration = 12000;
           curve = Curves.easeInOut;
         }
@@ -101,7 +101,7 @@ class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProvide
           vsync: this,
         );
         final Animation<double> curvedAnimation = CurvedAnimation(
-          parent: _animationController,
+          parent: _animationController!,
           curve: curve,
         );
         _animation =
@@ -111,16 +111,21 @@ class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProvide
               _animFraction = _animation.value;
             });
           });
-        _animationController.forward();
+        _animationController!.forward();
         break;
     }
+    _isInit= true;
 
   }
 
 
 
-  List<Widget> _generateWheelBluePrints(int number) {
-    if(widget.animationType != WheelAnimationType.helicopter)
+
+
+
+
+  List<Widget> _drawWheel(int number) {
+    if(widget.animationType != WheelAnimationType.apacheRotor)
       _startingAngle = widget.angleOffset * radianBase;
 
 
@@ -153,6 +158,7 @@ class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProvide
               onPressed: widget.buttons[i].onPressed,
               textSize: widget.buttons[i].textSize,
               iconSize: widget.buttons[i].iconSize,
+              image: widget.buttons[i].img,
               stroke: widget.stroke,
               icon: widget.buttons[i].icon,
               activePart: widget.visiblePart)
@@ -170,23 +176,26 @@ class ImmersiveWheelState extends State<ImmersiveWheel> with SingleTickerProvide
 
   @override
   Widget build(BuildContext context) {
+
+    var _size = _isInit&& widget.animationType != WheelAnimationType.center? widget.constrains
+        :
+        _animConstrains;
+
     return Container(
-      height: _animConstrains,
-      width: _animConstrains,
+      height: _size,
+      width: _size,
 
       child: Stack(
-          children: _generateWheelBluePrints(widget.buttons.length)
+          children: _drawWheel(widget.buttons.length)
       ),
     );
   }
 
-  @override
-  void didUpdateWidget(ImmersiveWheel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
+
 
   @override
   void dispose() {
+
     _animationController?.dispose();
     super.dispose();
   }

@@ -77,7 +77,7 @@ void main() {
       )
       );
 
-      expect(find.byKey(Key('ok')),findsOneWidget);
+      expect(find.byType(FloatingActionButton),findsOneWidget);
     });
 
     testWidgets('FAB test', (WidgetTester tester) async {
@@ -100,19 +100,19 @@ void main() {
 
     testWidgets('FAB test2', (WidgetTester tester) async {
       List<int> x=[4,2,6,7,4,3];
-      List<int> b= new List<int>();
+      List<int> b= new List.empty();
 //      = x.map(( int i) => i+ (i-1) +(i+1)).toList();
 
       String n='450';
       String nb='44';
       String nm='377';
 
-      int k= int.tryParse(n);
+      int k= int.tryParse(n)!;
       int j= Random(1).nextInt(n.length);
       String kk=n.replaceRange(j, j+1, '');
 
       if(kk.length >1 && !kk.startsWith("0")) {
-        if (int.tryParse(nm) == int.tryParse(nb) + int.tryParse(kk))
+        if (int.tryParse(nm) == int.tryParse(nb)! + int.tryParse(kk)!)
           print("YES");
         else
           print('NO');

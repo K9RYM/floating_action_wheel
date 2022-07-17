@@ -6,7 +6,7 @@ import 'package:floating_action_wheel/floating_action_wheel.dart';
 
 class DemoRoute extends StatefulWidget{
 
-  DemoRoute({Key key}):super(key: key){}
+  DemoRoute({Key? key}):super(key: key);
 
 
   @override
@@ -23,6 +23,7 @@ class DemoRouteState extends State<DemoRoute>{
 
   String demoText='Demo app';
   bool isSep=false;
+  bool isDefaultPressed=false;
   Color backgroundColor= Colors.teal;
   Color fabColor=Colors.white;
   Color fabBgColor=Colors.blue;
@@ -36,28 +37,30 @@ class DemoRouteState extends State<DemoRoute>{
   @override
   void initState() {
 
+    super.initState();
   }
 
 
 
 
   Widget faw() {
-    return FloatingActionWheel(
-//      X: 250,
-//      Y: 250,
+    return new FloatingActionWheel(
+
       buttons: [
-        WheelButton(onPressed: () {
-          setState(() {
-            demoText = "button #1 pressed";
-            backgroundColor= Colors.orangeAccent;
-          });
-        },
-            text: 'button 1',
-            backgroundColor: Colors.orange),
+        WheelButton(
+            onPressed: () => setState(() {
+                  demoText = "button #1 pressed";
+                  backgroundColor = Colors.orangeAccent;
+                }),
+            image:  Image.asset('assets/wheel_icon.png',
+              height: 35,width: 35,filterQuality:FilterQuality.high),
+            backgroundColor: Colors.orange
+        ),
+
         WheelButton(onPressed: () {
           setState(() {
             demoText = "button #2 pressed";
-            backgroundColor= Colors.greenAccent;
+            backgroundColor = Colors.greenAccent;
           });
         },
             icon: Icons.ac_unit,
@@ -67,7 +70,7 @@ class DemoRouteState extends State<DemoRoute>{
           WheelButton(onPressed: () {
             setState(() {
               demoText = "button #3 pressed";
-              backgroundColor= Colors.cyanAccent;
+              backgroundColor = Colors.cyanAccent;
             });
           },
               text: 'button 3',
@@ -78,7 +81,7 @@ class DemoRouteState extends State<DemoRoute>{
               onPressed: () {
                 setState(() {
                   demoText = "button #4 pressed";
-                  backgroundColor= Colors.pinkAccent;
+                  backgroundColor = Colors.pinkAccent;
                 });
               },
               icon: Icons.home,
@@ -89,10 +92,12 @@ class DemoRouteState extends State<DemoRoute>{
               onPressed: () {
                 setState(() {
                   demoText = "button #5 pressed";
-                  backgroundColor= Colors.purpleAccent;
+                  backgroundColor = Colors.purpleAccent;
                 });
               },
               text: 'button 5',
+              textSize: 14,
+              iconSize: 29,
               icon: Icons.info,
               backgroundColor: Colors.purple),
 
@@ -101,11 +106,13 @@ class DemoRouteState extends State<DemoRoute>{
               onPressed: () {
                 setState(() {
                   demoText = "button #6 pressed";
-                  backgroundColor= Colors.blueAccent;
+                  backgroundColor = Colors.blueAccent;
                 });
               },
-              text: 'button 6',
-              icon: Icons.image,
+              // text: 'button 6',
+              // icon: Icons.image,
+              image: Image.asset('assets/wheel_icon.png',
+                  height: 35,width: 35,filterQuality:FilterQuality.high),
               backgroundColor: Colors.blue),
 
       ],
@@ -116,6 +123,7 @@ class DemoRouteState extends State<DemoRoute>{
       fabForegroundColor: fabColor,
       fabBackgroundColor: fabBgColor,
       separated: isSep,
+      defaultPressed: isDefaultPressed,
       fabElevation: 0,
     );
   }
@@ -124,45 +132,51 @@ class DemoRouteState extends State<DemoRoute>{
   Widget animationSpinner(){
     return DropdownButton<WheelAnimationType>(
       onChanged: (val){setState(() {
-        animationType=val;
+        animationType=val??WheelAnimationType.none;
       });},
       value: animationType,
-      disabledHint: Text("select wheel animation"),
+      disabledHint:  const Text("select wheel animation"),
       items: [
         DropdownMenuItem(
-          child: Text("Around"),
+          child:  const Text("Around"),
           value: WheelAnimationType.around,
         ),
         DropdownMenuItem(
-          child: Text("Center"),
+          child:  const Text("Center"),
           value: WheelAnimationType.center,
         ),
         DropdownMenuItem(
-          child: Text("none"),
+          child:  const Text("none"),
           value: WheelAnimationType.none,
         ),
+        // DropdownMenuItem(
+        //   child:  const Text("Rotor",style: const TextStyle(fontSize: 12,color: Colors.red,fontStyle: FontStyle.italic),),
+        //   value: WheelAnimationType.apacheRotor,
+        // ),
       ],
 
     );}
 
   Widget sizeSpinner(){
     return DropdownButton<WheelSize>(
-      onChanged: (val){setState(() {
-        wheelSize=val;
-      });},
+      onChanged: (val){
+        setState(() {
+        wheelSize=val??WheelSize.wheel_medium_120;
+      });
+        },
       value: wheelSize,
       disabledHint: Text("select wheel size"),
       items: [
         DropdownMenuItem(
-          child: Text("Small"),
+          child:  const Text("Small"),
           value: WheelSize.wheel_small_90,
         ),
         DropdownMenuItem(
-          child: Text("Medium"),
+          child:  const Text("Medium"),
           value: WheelSize.wheel_medium_120,
         ),
         DropdownMenuItem(
-          child: Text("Large"),
+          child:  const Text("Large"),
           value: WheelSize.wheel_large_150,
         ),
       ],
@@ -174,29 +188,29 @@ class DemoRouteState extends State<DemoRoute>{
       width: 50,
       child: DropdownButton<int>(
         onChanged: (val){setState(() {
-          buttons=val;
+          buttons=val??4;
         });},
         value: buttons,
         disabledHint: Text("number of buttons"),
         items: [
           DropdownMenuItem(
-            child: Text("2"),
+            child:  const Text("2"),
             value: 2,
           ),
           DropdownMenuItem(
-            child: Text("3"),
+            child:  const Text("3"),
             value: 3,
           ),
           DropdownMenuItem(
-            child: Text("4"),
+            child:  const Text("4"),
             value: 4,
           ),
           DropdownMenuItem(
-            child: Text("5"),
+            child:  const Text("5"),
             value: 5,
           ),
           DropdownMenuItem(
-            child: Text("6"),
+            child: const  Text("6"),
             value: 6,
           ),
         ],
@@ -206,123 +220,6 @@ class DemoRouteState extends State<DemoRoute>{
 
 
 
-  Widget menusContainer() {
-    return Container(
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Wheel active part:'),
-                  ),
-                  Container(
-                    width: 50,
-                    child: TextField(
-                        maxLines: 1,
-                        maxLength: 3,
-                        focusNode: FocusNode(canRequestFocus: false),
-                        autofocus: false,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            hintText: '0.1-1',
-                            border: UnderlineInputBorder(),
-                            counterText: ''
-                        ),
-                        onChanged: (text) {
-                          setState(() {
-                            if (double.tryParse(text) >= 0.1 &&
-                                double.tryParse(text) <= 1)
-                              visiblePart = double.tryParse(text);
-                          });
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Angle offset:'),
-                  ),
-                  Container(
-                    width: 50,
-                    child: TextField(
-                        autofocus: false,
-                        focusNode: FocusNode(canRequestFocus: false),
-                        maxLines: 1,
-                        maxLength: 3,
-                        decoration: InputDecoration(
-                            hintText: '0-360',
-                            border: UnderlineInputBorder(),
-                            counterText: ''
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (text) {
-                          setState(() {
-                            if (double.tryParse(text) >= 0 &&
-                                double.tryParse(text) <= 360)
-                              angleOffset = double.tryParse(text);
-                          });
-                        }),
-                  ),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Wheel buttons:'),
-                  ),
-                  buttonsSpinner(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Separating bezels:'),
-                  ),
-                  Container(
-                      child: Switch(
-                        value: isSep,
-                        activeColor: Colors.blue,
-
-                        onChanged: (_) {
-                          setState(() {
-                            isSep = !isSep;
-                          });
-                        },
-                      )
-                  )
-                ],),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Wheel animation type:'),
-                ),
-                animationSpinner(),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Wheel size:'),
-                ),
-                sizeSpinner(),
-              ],
-            ),
-            Divider(color: Colors.grey,height: 0,thickness: 1,)
-          ]),
-    );
-  }
-
   Widget demoContainer() {
     return Container(
 
@@ -331,7 +228,7 @@ class DemoRouteState extends State<DemoRoute>{
         padding: const EdgeInsets.all(28.0),
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.elliptical(50,90)),
+              borderRadius:  const BorderRadius.all(Radius.elliptical(50,90)),
               color: backgroundColor
           ),
           child: Center(
@@ -340,11 +237,7 @@ class DemoRouteState extends State<DemoRoute>{
               child: Text(demoText),
             ),
           ),
-//      Stack(
-//          children: [
-//            faw()
-//          ]
-//      ),
+
         ),
       ),
     );
@@ -354,13 +247,168 @@ class DemoRouteState extends State<DemoRoute>{
   @override
   Widget build(BuildContext context) {
 
+
+    Widget menusContainer() {
+      return Container(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Wheel active part:'),
+                    ),
+                    Container(
+                      width: 50,
+                      child: TextField(
+                          maxLines: 1,
+                          maxLength: 3,
+                          // focusNode: FocusNode(canRequestFocus: true),
+                          // onEditingComplete: (){
+                          // },
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              hintText: '0.1-1',
+                              border: UnderlineInputBorder(),
+                              counterText: ''
+                          ),
+                          onChanged: (text) {
+                            if (double.tryParse(text) != null)
+                              if (double.tryParse(text)! >= 0.1 &&
+                                  double.tryParse(text)! <= 1)
+                                setState(() {
+                                  visiblePart = double.tryParse(text)!;
+                                });
+
+                          }),
+
+                    ),
+                     Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Angle offset:'),
+                    ),
+                    Container(
+                      width: 50,
+                      child: TextField(
+                          autofocus: false,
+                          // focusNode: FocusNode(canRequestFocus: true),
+                          maxLines: 1,
+                          maxLength: 3,
+                          decoration: InputDecoration(
+                              hintText: '0-360',
+                              border: UnderlineInputBorder(),
+                              counterText: ''
+                          ),
+                          keyboardType: TextInputType.number,
+                          onChanged: (text) {
+                            if (double.tryParse(text) != null)
+                              if (double.tryParse(text)! >= 0 &&
+                                  double.tryParse(text)! <= 360)
+                                setState(() {
+                                  angleOffset = double.tryParse(text)!;
+                                });
+
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const  Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Wheel buttons:'),
+                    ),
+                    buttonsSpinner(),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Separating bezels:',style: const TextStyle(fontSize: 14),),
+                    ),
+                    Container(
+                      child:
+                      /* could make isSeparated boolean in a DropDownMenu instead of Switch because
+                      popup menu overlays trigger all overlays rebuild which rebuilds the ImmersiveWheel overlay immediately */
+                      // DropdownButton<bool>(
+                      //   onChanged: (val){setState(() {
+                      //     isSep=val!;
+                      //   });},
+                      //   value: isSep,
+                      //   disabledHint: Text("separated"),
+                      //   items: [
+                      //     DropdownMenuItem(
+                      //       child:  const Text("false"),
+                      //       value: false,
+                      //     ),
+                      //     DropdownMenuItem(
+                      //       child:  const Text("true"),
+                      //       value: true,
+                      //     ),
+                      //   ],
+                      //
+                      // ),
+                        Switch(
+                          value: isSep,
+                          activeColor: Colors.blue,
+                          onChanged: (_) =>
+                            setState(() {
+                              isSep = !isSep;
+                            }),
+                        )
+                    )
+                  ],),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Wheel animation type:'),
+                    ),
+                    animationSpinner(),
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:  const Text('Wheel size:'),
+                    ),
+                    sizeSpinner(),
+                  ],
+                ),
+              ),
+              const  Divider(color: Colors.grey,height: 0,thickness: 1,)
+            ]),
+      );
+    }
+
+
+
+    // print('demo rebuild');
+
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Floating Action Wheel Demo App'),
+        title: const  Text('Floating Action Wheel Demo App'),
 
       ),
-//      floatingActionButton: faw(),
-//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+     // floatingActionButton: faw(),
+     // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 //      bottomNavigationBar: BottomAppBar(
 //        shape: CircularNotchedRectangle(),
 ////          notchMargin: 100,
@@ -379,7 +427,7 @@ class DemoRouteState extends State<DemoRoute>{
             demoContainer(),
             Container(
               height: 320,
-              color: Color.fromARGB(255, 230, 230, 230),
+              color: const Color.fromARGB(255, 230, 230, 230),
               child: Center(
                 child: faw(),
               ),
@@ -392,3 +440,4 @@ class DemoRouteState extends State<DemoRoute>{
 
   }
 }
+

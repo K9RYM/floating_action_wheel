@@ -1,5 +1,6 @@
 
-//import 'dart:math' as math;
+
+
 import 'package:flutter/material.dart';
 
 
@@ -15,21 +16,25 @@ import 'package:flutter/material.dart';
 class WheelButton {
 
 
+  WheelButton({Key? key, this.text, this.icon,
+    this.textSize, this.iconSize,this.image,
+    this.backgroundColor=Colors.blue, this.foregroundColor=Colors.white, required this.onPressed}):
+        assert(textSize != null ? text != null : textSize==null, 'Text size given without text'),
+        assert(image == null || (icon == null && text == null),'Please either pass an image OR a text/icon'),
+        assert(iconSize != null ? icon != null : iconSize==null, 'Text size given without text');
 
 
-  WheelButton({Key key, this.text, this.icon,
-    this.textSize, this.iconSize,
-    this.backgroundColor=Colors.blue, this.foregroundColor=Colors.white, @required this.onPressed}):
-        assert(textSize != null ? text != null : textSize==null),
-        assert(iconSize != null ? icon != null : iconSize==null);
+  ///   String? [text] (Nullable) the text to display on the button
+  final String? text;
 
 
-  ///   String [text] (Nullable) the text to display on the button
-  final String text;
+  ///   Image? [image] (Nullable) pass an [Image] object to draw the image on the button
+  ///   Should only use image parameter without text or icon parameters
+  final Image? image;
 
 
-  ///   IconData [icon] (Nullable) the icon to show on the button
-  final IconData icon;
+  ///   IconData? [icon] (Nullable) the icon to show on the button
+  final IconData? icon;
 
 
   ///   Color [backgroundColor] (Nullable) Button's color
@@ -51,51 +56,26 @@ class WheelButton {
   ///   Double [textSize] (Nullable) text font size for the [TextPainter]
   ///
   ///   Default size calculated based on wheel size
-  final double textSize;
+  final double? textSize;
 
   ///   Double [iconSize] (Nullable) icon size for the [TextPainter]
   ///
   ///   Default size calculated based on wheel size
-  final double iconSize;
+  final double? iconSize;
 
 
-//  @override
-//  State<StatefulWidget> createState() => new ArcButtonState();
+  /* Member to hold the ImageInfo object to pass to the underlying CustomPaint in WheelSlice */
+  ImageInfo? _img;
+
+  set imageInfo(ImageInfo? value) {
+    _img = value;
+  }
+
+  ImageInfo? get img => _img;
+
+
 
 }
 
-//class ArcButtonState extends State<ArcButton> {
-//
-//  Color currentColor;
-//  Color textIconColor;
-////  final Color highlightColor = Color(0xabffffff);
-//
-//  @override
-//  void initState() {
-//    super.initState();
-//    currentColor = widget.backgroundColor;
-//    textIconColor = widget.foregroundColor ?? Color.alphaBlend(Color(0xAAFFFFFF),widget.backgroundColor);
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container(
-//        child: GestureDetector(
-//          onTapDown: (_) {
-//            setState(() {
-//              print('down');
-//            });
-//          },
-//          onLongPressUp: () {
-//            print('up');
-//            setState(() {});
-//          },
-//        ));
-////        widget.icon != null ? Icon(widget.icon)
-////            : widget.text);
-//  }
-//
-//
-//}
 
 
