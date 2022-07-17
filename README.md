@@ -23,8 +23,12 @@ dependencies:
 ## Usage:
 You have two options to use the FloatingActionWheel, you can use it as a normal FAB in Scaffold(floatingActionButton) or you can 
 put it in other compatible widgets like a Container or a Stack
+
 Simply import the main classes and use the main FloatingActionWheel() constructor with its parameters, the mandatory parameter is the
-buttons list where you pass a list of WheelButton each has its own parameters, internal documentation for the parameters available
+buttons list where you pass a list of WheelButton each has its own properties, like its text, icon, image and colors, and its OnPressed callback. Look up the internal documentation for the WheelButton class and its parameters
+
+
+
 
 ```dart
 import 'package:floating_action_wheel/floating_action_wheel.dart';
@@ -51,14 +55,16 @@ FloatingActionWheel(
         },
             icon: Icons.ac_unit,
             backgroundColor: Colors.green),
+            
         WheelButton(onPressed: () {
           setState(() {
             demoText = "button #3 pressed";
             backgroundColor= Colors.cyanAccent;
           });
         },
-            text: 'button 3',
+            image: Image.asset('assets/your_image.png'),
             backgroundColor: Colors.cyan),
+            
         WheelButton(
             onPressed: () {
           setState(() {
